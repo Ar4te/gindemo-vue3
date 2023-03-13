@@ -88,14 +88,12 @@
             </el-sub-menu>
             <el-sub-menu index="5">
               <template #title>
-                <el-icon>
-                  <User />
-                </el-icon>
-                管理员
+                <el-avatar :src=avatarPicStr />
               </template>
               <el-menu-item index="5-1">个人中心</el-menu-item>
               <el-menu-item index="5-2">修改密码</el-menu-item>
               <el-menu-item index="5-3">退出系统</el-menu-item>
+              <el-menu-item index="5-4" @click="handleLogin(isLogined)">{{ isLogined ? '切换账号' : '登录/注册' }}</el-menu-item>
             </el-sub-menu>
           </el-menu>
         </div>
@@ -103,14 +101,27 @@
       <div class="bottom">3</div>
     </div>
   </div>
+
+  <div class="register">
+    <Regist :dialogVisible="dialogVisible" @registerClose='registerClose' />
+  </div>
 </template>
 <script setup lang="ts">
 import { computed } from '@vue/reactivity';
-import { onMounted, ref, toRefs } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from "vuex";
+import conster from "@/config/conster";
+import Regist from '@/views/Regist.vue'
+
+//头像
+const avatarPicStr = conster.avatarPicStr ? conster.avatarPicStr : '';
 
 const route = useRoute();
+
+let isLogined = ref(false);
+
+let dialogVisible = ref(false);
 
 let store = useStore();
 
@@ -127,7 +138,7 @@ let activeIndex1 = ref('1');
 let leftMenuOpen = ref(true);
 
 const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
+  // console.log(key, keyPath);
 };
 
 const handleClose = () => {
@@ -144,8 +155,18 @@ const changeThemeColor = (index: number) => {
   store.dispatch('commitCurrentThemeColor', color);
 };
 
+const handleLogin = (val: boolean) => {
+  if (!val) {
+    dialogVisible.value = true;
+  }
+}
+
+const registerClose = (val: any) => {
+  dialogVisible.value = val.dialogVisible;
+}
+
 onMounted(async () => {
-  console.log(route.query.abc, 'data from login page');
+  // console.log(route.query.abc, 'data from login page');
 });
 </script>
 <style scoped lang="less">

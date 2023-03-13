@@ -4,7 +4,7 @@ import 'nprogress/nprogress.css';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue'),
   },
@@ -17,9 +17,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Index.vue'),
   },
   {
-    path: '/layout',
+    path: '/',
     name: 'layout',
     component: () => import('@/views/Layout.vue'),
+  },
+  {
+    path: '/regist',
+    name: 'register',
+    component: () => import('@/views/Regist.vue'),
   },
 ];
 

@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <div class="left" :style="{ width: !leftMenuOpen ? '65px' : '200px', background: currentThemeColor }">
+    <div class="left"
+      :style="{ width: !leftMenuOpen ? '65px' : '200px', background: currentThemeColor ? currentThemeColor : 'Red' }">
       <div class="logo">
         <div>Bing</div>
       </div>
@@ -48,7 +49,7 @@
       </el-menu>
     </div>
     <div class="right">
-      <div class="top" :style="{ background: currentThemeColor }">
+      <div class="top" :style="{ background: currentThemeColor ? currentThemeColor : 'Red' }">
         <div class="icon" @click="leftMenuOpen = !leftMenuOpen">
           <el-icon size="30px">
             <fold />
@@ -113,17 +114,16 @@ import { useRoute } from 'vue-router';
 import { useStore } from "vuex";
 import conster from "@/config/conster";
 import Regist from '@/views/Regist.vue'
+import store from "@/store/index";
 
 //头像
 const avatarPicStr = conster.avatarPicStr ? conster.avatarPicStr : '';
 
 const route = useRoute();
 
-let isLogined = ref(false);
+let isLogined: boolean;
 
 let dialogVisible = ref(false);
-
-let store = useStore();
 
 let getColorNames = computed(() => {
   return store.getters['getColorNames'];
@@ -167,6 +167,7 @@ const registerClose = (val: any) => {
 
 onMounted(async () => {
   // console.log(route.query.abc, 'data from login page');
+  isLogined = store.state.Authorization != null && store.state.Authorization != '' ? true : false;
 });
 </script>
 <style scoped lang="less">

@@ -1,9 +1,22 @@
 <template>
-  <el-dialog v-model="dialogVisible" title="欢迎登录~" width="20%" draggable :show-close='false'>
+  <el-dialog v-model="dialogVisible" title="欢迎~" width="20%" draggable :show-close='false' :close-on-click-modal='false'>
+    <el-radio-group v-model="operate">
+      <el-radio-button label="isLogin">登录</el-radio-button>
+      <el-radio-button disabled label="!isLogin">注册</el-radio-button>
+    </el-radio-group>
+    <div style="margin: 20px 0; width: 100%;"></div>
+    <el-form label-postion="right" label-width="100px" :model="loginForm" style="max-width: 460px;">
+      <el-form-item label="手机号：">
+        <el-input v-model="loginForm.telephone" />
+      </el-form-item>
+      <el-form-item label="密码：">
+        <el-input type="Password" v-model="loginForm.password" />
+      </el-form-item>
+    </el-form>
     <template #footer>
-      <span class="dialog-footer">
+      <span class=" dialog-footer">
         <el-button @click="registerClose">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false">
+        <el-button type="primary" @click="Submit">
           Confirm
         </el-button>
       </span>
@@ -11,11 +24,10 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref, reactive, defineProps, defineEmits, toRefs, } from 'vue';
+import { ref, reactive, defineProps, defineEmits, toRefs } from 'vue';
 import { login, rePwd } from '@/api/login';
 import { ElMessage } from 'element-plus';
 import store from "@/store/index";
-import { useRouter } from "vue-router";
 
 const props = defineProps({
   dialogVisible: Boolean,
@@ -24,6 +36,7 @@ const props = defineProps({
 
 const { dialogVisible } = toRefs(props);
 
+let operate = ref('isLogin');
 //关闭弹窗
 const emit = defineEmits(['registerClose']);
 const registerClose = () => {
@@ -38,12 +51,17 @@ const loginForm = reactive({
   password: '',
 });
 
-const router = useRouter();
-
 let formdata = new FormData();
+
+const Submit = () => {
+  if (operate.value === 'isLogin') {
+    Login();
+  }
+}
 
 // 登录
 const Login = async () => {
+  console.log('execute Login operator');
   formdata = new FormData();
   formdata.append('telephone', loginForm.telephone);
   formdata.append('password', loginForm.password);
@@ -53,13 +71,7 @@ const Login = async () => {
     if (res.data) {
       store.commit('changeLogin', { Authorization: res.data['token'] });
     }
-    // 页面跳转
-    router.push({
-      path: '/layout',
-      query: {
-        abc: '111',
-      },
-    });
+    registerClose();
   } else {
     ElMessage.error(res.msg);
   }

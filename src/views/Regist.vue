@@ -1,16 +1,16 @@
 <template>
   <el-dialog v-model="dialogVisible" title="欢迎~" width="20%" draggable :show-close='false' :close-on-click-modal='false'>
     <el-radio-group v-model="operate">
-      <el-radio-button label="isLogin">登录</el-radio-button>
-      <el-radio-button disabled label="!isLogin">注册</el-radio-button>
+      <el-radio-button label="login">登录</el-radio-button>
+      <el-radio-button disabled label="regist">注册</el-radio-button>
     </el-radio-group>
     <div style="margin: 20px 0; width: 100%;"></div>
     <el-form label-postion="right" label-width="100px" :model="loginForm" style="max-width: 460px;">
       <el-form-item label="手机号：">
-        <el-input v-model="loginForm.telephone" />
+        <el-input v-model="loginForm.telephone" clearable />
       </el-form-item>
       <el-form-item label="密码：">
-        <el-input type="Password" v-model="loginForm.password" />
+        <el-input type="Password" v-model="loginForm.password" clearable show-password />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -32,18 +32,19 @@ import store from "@/store/index";
 const props = defineProps({
   dialogVisible: Boolean,
   info: String,
+  operate: String,
 });
 
-const { dialogVisible } = toRefs(props);
-
-let operate = ref('isLogin');
+const { dialogVisible, operate } = toRefs(props);
+let isLogined = ref(false);
 //关闭弹窗
-const emit = defineEmits(['registerClose']);
+const emit = defineEmits(['registerClose', 'isLogined']);
 const registerClose = () => {
-  let param = {
+  let params = {
     dialogVisible: false,
+    isLogined: isLogined.value,
   };
-  emit('registerClose', param);
+  emit('registerClose', params);
 };
 
 const loginForm = reactive({
@@ -54,10 +55,10 @@ const loginForm = reactive({
 let formdata = new FormData();
 
 const Submit = () => {
-  if (operate.value === 'isLogin') {
+  if (operate?.value === 'login') {
     Login();
   }
-}
+};
 
 // 登录
 const Login = async () => {
@@ -71,6 +72,7 @@ const Login = async () => {
     if (res.data) {
       store.commit('changeLogin', { Authorization: res.data['token'] });
     }
+    isLogined.value = true;
     registerClose();
   } else {
     ElMessage.error(res.msg);

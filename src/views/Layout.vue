@@ -92,8 +92,8 @@
                 <el-avatar :src=avatarPicStr />
               </template>
               <el-menu-item index="5-1">个人中心</el-menu-item>
-              <el-menu-item index="5-2">修改密码</el-menu-item>
-              <el-menu-item index="5-3">退出系统</el-menu-item>
+              <el-menu-item index="5-2" :disabled="!isLogined" @click="rePwd">修改密码</el-menu-item>
+              <el-menu-item index="5-3" :disabled="!isLogined" @click="quitLogin">退出系统</el-menu-item>
               <el-menu-item index="5-4" @click="handleLogin(isLogined)">{{ isLogined ? '切换账号' : '登录/注册' }}</el-menu-item>
             </el-sub-menu>
           </el-menu>
@@ -104,14 +104,13 @@
   </div>
 
   <div class="register">
-    <Regist :dialogVisible="dialogVisible" @registerClose='registerClose' />
+    <Regist :dialogVisible="dialogVisible" @registerClose='registerClose' :operate="operate" />
   </div>
 </template>
 <script setup lang="ts">
 import { computed } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { useStore } from "vuex";
 import conster from "@/config/conster";
 import Regist from '@/views/Regist.vue'
 import store from "@/store/index";
@@ -121,9 +120,11 @@ const avatarPicStr = conster.avatarPicStr ? conster.avatarPicStr : '';
 
 const route = useRoute();
 
-let isLogined: boolean;
+let isLogined = ref(false);
 
 let dialogVisible = ref(false);
+
+let operate = ref('login');
 
 let getColorNames = computed(() => {
   return store.getters['getColorNames'];
@@ -158,17 +159,30 @@ const changeThemeColor = (index: number) => {
 const handleLogin = (val: boolean) => {
   if (!val) {
     dialogVisible.value = true;
+    operate.value = 'login';
   }
-}
+};
 
 const registerClose = (val: any) => {
   dialogVisible.value = val.dialogVisible;
-}
+  isLogined.value = val.isLogined;
+};
 
 onMounted(async () => {
   // console.log(route.query.abc, 'data from login page');
-  isLogined = store.state.Authorization != null && store.state.Authorization != '' ? true : false;
+  isLogined.value = store.state.Authorization != null && store.state.Authorization.length > 0;
 });
+
+//退出登录
+const quitLogin = () => {
+  isLogined.value = false;
+  store.commit('changeLogin', { Authorization: '' });
+};
+
+//修改密码
+const rePwd = () => {
+  console.log("execute rePwd");
+};
 </script>
 <style scoped lang="less">
 .container {

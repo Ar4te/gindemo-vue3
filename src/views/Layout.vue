@@ -92,7 +92,7 @@
                 <el-avatar :src=avatarPicStr />
               </template>
               <el-menu-item index="5-1">个人中心</el-menu-item>
-              <el-menu-item index="5-2" :disabled="!isLogined" @click="rePwd">修改密码</el-menu-item>
+              <el-menu-item index="5-2" :disabled="!isLogined" @click="handleRePwd">修改密码</el-menu-item>
               <el-menu-item index="5-3" :disabled="!isLogined" @click="quitLogin">退出系统</el-menu-item>
               <el-menu-item index="5-4" @click="handleLogin(isLogined)">{{ isLogined ? '切换账号' : '登录/注册' }}</el-menu-item>
             </el-sub-menu>
@@ -180,8 +180,9 @@ const quitLogin = () => {
 };
 
 //修改密码
-const rePwd = () => {
-  console.log("execute rePwd");
+const handleRePwd = () => {
+  dialogVisible.value = true;
+  operate.value = 'repwd';
 };
 </script>
 <style scoped lang="less">

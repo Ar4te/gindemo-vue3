@@ -41,7 +41,7 @@ export const httpRequest = (options: any) => new Promise<any>((resolve, reject) 
       if (error.response.status === 403) {
         ElMessage.error('错了');
       } else {
-        ElMessage.error('服务器请求错误，请稍后重试');
+        ElMessage.error(error.response.data ? error.response.data.msg : '服务器请求错误，请稍后重试');
       }
       return Promise.reject(error);
     },

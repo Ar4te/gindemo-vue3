@@ -1,10 +1,11 @@
 import { httpRequest } from '@/utils/request';
+import { MessageModel } from '@/utils/messageModel'
 
-interface MessageModel {
-  code: number;
-  data: any;
-  msg: string;
-}
+// interface MessageModel {
+//   code: number;
+//   data: any;
+//   msg: string;
+// }
 
 export const login = (params: any): Promise<MessageModel> => httpRequest({
   url: '/api/auth/login',

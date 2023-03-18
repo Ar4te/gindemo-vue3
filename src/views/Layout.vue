@@ -7,7 +7,7 @@
       </div>
       <el-menu active-text-color="#ffd04b" :background-color="currentThemeColor" class="el-menu-vertical-demo"
         default-active="2" text-color="#fff" @open="handleOpen" @close="handleClose" :collapse="!leftMenuOpen"
-        style="height: 100%;">
+        style="height: 100%;" router>
         <el-sub-menu index="1-1">
           <template #title>
             <el-icon>
@@ -46,6 +46,7 @@
           </template>
           <el-menu-item index="4-1">权限管理</el-menu-item>
         </el-sub-menu>
+        <el-menu-item index="/articleMgr">文档管理</el-menu-item>
       </el-menu>
     </div>
     <div class="right">
@@ -99,7 +100,9 @@
           </el-menu>
         </div>
       </div>
-      <div class="bottom">3</div>
+      <div class="bottom">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 
@@ -188,7 +191,7 @@ const handleRePwd = () => {
 <style scoped lang="less">
 .container {
   width: 100vw;
-  height: 100vh;
+  height: 94vh;
   display: flex;
 
   .left {
@@ -234,6 +237,9 @@ const handleRePwd = () => {
 
     .bottom {
       flex: 1;
+      padding: 4px;
+      height: 100%;
+      border: 1px solid red;
     }
   }
 }

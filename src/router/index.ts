@@ -20,6 +20,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'layout',
     component: () => import('@/views/Layout.vue'),
+    children: [
+      {
+        path: 'articleMgr',
+        name: 'articleMgr',
+        component: () => import('@/views/article/articleMgr.vue'),
+      }
+    ]
   },
   {
     path: '/regist',

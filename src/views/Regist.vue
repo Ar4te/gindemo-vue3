@@ -92,7 +92,7 @@ const repwdRules = reactive<FormRules>({
 });
 
 let rule = operate?.value === 'login' ? loginRules : repwdRules;
-console.log(rule);
+// console.log(rule);
 
 let formdata = new FormData();
 

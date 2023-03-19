@@ -2,7 +2,7 @@
   <div class="toolbar">
     <el-button @click="handleRefresh" :icon="Refresh" type="primary" size="small">刷新</el-button>
   </div>
-  <el-table :data="tableData" style="width: 98%" highlight-current-row row-key="ID">
+  <el-table :data="tableData" style="width: 100%" highlight-current-row row-key="ID">
     <el-table-column prop="FileName" label="文件名" width="180px" />
     <el-table-column prop="CreatedAt" label="上传时间" />
     <el-table-column label="操作">

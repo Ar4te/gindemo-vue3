@@ -46,7 +46,18 @@
           </template>
           <el-menu-item index="4-1">权限管理</el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="/articleMgr">文档管理</el-menu-item>
+        <el-sub-menu>
+          <template #title>
+            <el-icon>
+              <Files />
+            </el-icon>
+            <span>文档管理</span>
+          </template>
+          <el-menu-item index="/articleMgr">
+            <el-icon>
+              <Files />
+            </el-icon>文档管理</el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </div>
     <div class="right">
@@ -146,12 +157,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
 };
 
 const handleClose = () => {
-  console.log('handleClose');
-  console.log(currentThemeColor);
 };
 
 const handleOpen = () => {
-  console.log('handleOpen');
 };
 
 const changeThemeColor = (index: number) => {
@@ -239,7 +247,6 @@ const handleRePwd = () => {
       flex: 1;
       padding: 4px;
       height: 100%;
-      border: 1px solid red;
     }
   }
 }

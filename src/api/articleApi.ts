@@ -18,3 +18,9 @@ export let uploadFile = (params: any): Promise<MessageModel> => httpRequest({
   method: 'post',
   data: params,
 });
+
+export let deleteFile = (params: any): Promise<MessageModel> => httpRequest({
+  url: '/api/article/delFile',
+  method: 'delete',
+  params: params,
+});

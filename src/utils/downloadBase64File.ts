@@ -9,7 +9,6 @@ export function downloadFileFromBase64(base64String: string, fileName: string) {
     }
     byteArrays.push(new Uint8Array(byteNumbers));
   }
-  console.log(fileName);
 
   let _fileType = "text/plain";
   let _fileExtension = 'txt';

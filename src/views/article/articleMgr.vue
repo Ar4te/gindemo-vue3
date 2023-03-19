@@ -3,7 +3,7 @@
     <el-button @click="handleRefresh" :icon="Refresh" type="primary" size="small">刷新</el-button>
     <el-button @click="handleUpload" :icon="Upload" type="primary" size="small">上传</el-button>
   </div>
-  <el-table :data="tableData" style="width: 100%" highlight-current-row row-key="ID">
+  <el-table :data="tableData" style="width: 100%" highlight-current-row row-key="ID" stripe height="100%">
     <el-table-column prop="FileName" label="文件名" width="180px" />
     <el-table-column prop="CreatedAt" label="上传时间" />
     <el-table-column prop="Description" label="文件描述" />
@@ -18,15 +18,8 @@
 
   <el-drawer v-model="drawer" ref="drawerRef" class="demo-drawer" direction="rtl" :before-close="closeDrawer"
     :title="drawerTitle">
-    <!-- <template #header>
-      <h4>{{ drawerTitle }}</h4>
-    </template> -->
     <div class="demo-drawer__content">
       <el-form :model="articleForm" label-position="right" :label-width="formLabelWidth">
-        <!-- <el-form-item label="文件名：">
-          <el-input v-model="articleForm.FileName" autocomplete="off" />
-        </el-form-item> -->
-
         <el-form-item label="文件：">
           <el-upload v-model:file-list="file" class="upload-demo" :on-remove="handleRemove" :limit="1"
             :on-exceed="handleExceed" :show-file-list="true" action="" :auto-upload="false">
@@ -48,12 +41,6 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <!-- <div class="demo-drawer__footer">
-        <el-button @click="closeDrawer">Cancel</el-button>
-        <el-button type="primary" :loading="loading">{{
-          loading ? 'Submitting ...' : 'Submit'
-        }}</el-button>
-      </div> -->
     </div>
     <template #footer>
       <div style="flex: auto">
@@ -64,12 +51,12 @@
   </el-drawer>
 </template>
 <script lang="ts">
-import { getAllArticles, downloadFile, uploadFile } from '@/api/articleApi';
+import { getAllArticles, downloadFile, uploadFile, deleteFile } from '@/api/articleApi';
 import { ElMessage } from 'element-plus';
 import { reactive, toRefs } from "vue";
 import { Download, Delete, Edit, Refresh, Upload, Plus } from '@element-plus/icons-vue';
 import { downloadFileFromBase64 } from "@/utils/downloadBase64File";
-import type { UploadProps, UploadUserFile } from 'element-plus'
+import type { UploadUserFile } from 'element-plus'
 export default {
   setup() {
     const formLabelWidth = '100px';
@@ -94,7 +81,6 @@ export default {
       if (res && res.success) {
         let _table = res.data;
         data.tableData = _table.data;
-        ElMessage.success("操作成功");
       } else {
         ElMessage.error(res ? res.msg : '系统异常');
       }
@@ -142,8 +128,17 @@ export default {
       data.articleForm.Description = "";
     };
     //删除文件
-    let handleDelete = (val: any) => {
-      console.log(val.ID);
+    let handleDelete = async (val: any) => {
+      let request = {
+        fileId: val.Id,
+      };
+      let res = await deleteFile(request);
+      if (res && res.success) {
+        ElMessage.success(res.msg);
+        getAllArticle();
+      } else {
+        ElMessage.error(res ? res.msg : "系统异常");
+      }
     };
     //移除文件
     let handleRemove = () => {
@@ -165,6 +160,7 @@ export default {
         if (res && res.success) {
           ElMessage.success(res.msg);
           closeDrawer();
+          getAllArticle();
         } else {
           ElMessage.error(res ? res.msg : "操作异常");
         }

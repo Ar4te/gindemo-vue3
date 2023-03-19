@@ -8,7 +8,7 @@ export const login = (params: any): Promise<MessageModel> => httpRequest({
 });
 
 export const rePwd = (params: any): Promise<MessageModel> => httpRequest({
-  url: '/api/auth/repwd',
+  url: '/api/auth/rePwd',
   method: 'post',
   data: params,
 });

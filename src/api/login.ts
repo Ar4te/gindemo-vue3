@@ -12,3 +12,9 @@ export const rePwd = (params: any): Promise<MessageModel> => httpRequest({
   method: 'post',
   data: params,
 });
+
+export let getUserInfo = (params: any): Promise<MessageModel> => httpRequest({
+  url: '/api/auth/info',
+  method: 'get',
+  data: params,
+});

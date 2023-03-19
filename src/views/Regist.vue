@@ -26,7 +26,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, defineProps, defineEmits, toRefs } from 'vue';
-import { login, rePwd } from '@/api/login';
+import { login, rePwd, getUserInfo } from '@/api/login';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import store from "@/store/index";
@@ -123,6 +123,7 @@ const Login = async () => {
     ElMessage.success(res.msg);
     if (res.data) {
       store.commit('changeLogin', { Authorization: res.data['token'] });
+      GetUserInfo();
     }
     isLogined.value = true;
     registerClose();
@@ -148,6 +149,16 @@ const RePwd = async () => {
     ElMessage.error(data.msg);
   }
 }
+
+// 获取用户信息
+const GetUserInfo = async () => {
+  let res = await getUserInfo('');
+  if (res && res.success) {
+    localStorage.setItem('userInfo', JSON.stringify(res.data.user));
+  } else {
+    ElMessage.error(res ? res.msg : '后台异常');
+  }
+};
 </script>
 <style scoped lang="less">
 .container {

@@ -12,3 +12,9 @@ export let downloadFile = (params: any): Promise<MessageModel> => httpRequest({
   method: 'get',
   params,
 });
+
+export let uploadFile = (params: any): Promise<MessageModel> => httpRequest({
+  url: '/api/article/upload',
+  method: 'post',
+  data: params,
+});

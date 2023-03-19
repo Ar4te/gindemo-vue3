@@ -36,7 +36,6 @@ export function downloadFileFromBase64(base64String: string, fileName: string) {
       _fileType = "image/gif";
       break;
   }
-  console.log(fileName);
   const blob = new Blob(byteArrays, { type: _fileType });
   const link = document.createElement('a');
   link.href = window.URL.createObjectURL(blob);
